@@ -14,8 +14,9 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/presets/ERC20PresetMinte
 import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
-contract BNSTokenis is
+contract BNSToken is
     Initializable,
+    ContextUpgradeable,
     ERC20Upgradeable,
     ERC20PermitUpgradeable,
     ERC20BurnableUpgradeable,
@@ -23,29 +24,70 @@ contract BNSTokenis is
     ERC20PresetMinterPauserUpgradeable
 {   
 
+    string private  _name;
+    string private  _symbol;
+    uint256 private _initialSupply;
+
     /**
      * main Function 
      */
-    function initialize(
-        string memory _name,
-        string memory _symbol,
-        uint256 _initialSupply
-    ) public initializer {
-        __BNSToken_init(_name, _symbol, _initialSupply);
+    function initialize() public initializer {
+
+        // update the variable to match 
+        _name = "Binance Name Service";
+        _symbol =  "BNS";
+        _initialSupply = 2_500_000_000 * (10 ** 18);
+
+        // process deployment
+        __BNSToken_init();
     }
 
-    function __BNSToken_init(
-        string memory _name,
-        string memory _symbol,
-        uint256 _initialSupply
-    ) private  {
+    function __BNSToken_init() private  {
 
         __Context_init();
 
         __ERC20Permit_init(_name);
-        __ERC20_init_unchained(_name, _symbol);
+        __ERC20PresetMinterPauser_init(_name, _symbol);
+         __ERC20Votes_init();
+
         _mint(_msgSender(), _initialSupply);
     }
+
+
+    ///////////////// overrides starts ///////////////////
+
+     function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal virtual override(ERC20Upgradeable, ERC20PresetMinterPauserUpgradeable)
+    {
+        super._beforeTokenTransfer(from, to, amount);
+    }
+
+
+    function _afterTokenTransfer(address from, address to, uint256 amount)
+        internal
+        override(ERC20Upgradeable, ERC20VotesUpgradeable)
+    {
+        super._afterTokenTransfer(from, to, amount);
+    }
+
+    function _mint(address to, uint256 amount)
+        internal
+        override(ERC20Upgradeable, ERC20VotesUpgradeable)
+    {
+        super._mint(to, amount);
+    }
+
+    function _burn(address account, uint256 amount)
+        internal
+        override(ERC20Upgradeable, ERC20VotesUpgradeable)
+    {
+        super._burn(account, amount);
+    }
+
+    ///////////////////// overrides ends /////////////////
 
     uint256[50] private __gap;
 }

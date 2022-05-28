@@ -13,7 +13,7 @@ require("@nomiclabs/hardhat-etherscan");
 
 require('hardhat-contract-sizer');
 
-require('hardhat-deploy');
+//require('hardhat-deploy');
 
 require('@openzeppelin/hardhat-upgrades');
 
