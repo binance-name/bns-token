@@ -10,9 +10,9 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/draft-ERC20PermitUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20VotesUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/presets/ERC20PresetMinterPauserUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import "./libs/ERC20PresetMinterUpgradeable.sol";
 
 contract BNSToken is
     Initializable,
@@ -21,7 +21,7 @@ contract BNSToken is
     ERC20PermitUpgradeable,
     ERC20BurnableUpgradeable,
     ERC20VotesUpgradeable,
-    ERC20PresetMinterPauserUpgradeable
+    ERC20PresetMinterUpgradeable
 {   
 
     string private  _name;
@@ -47,7 +47,8 @@ contract BNSToken is
         __Context_init();
 
         __ERC20Permit_init(_name);
-        __ERC20PresetMinterPauser_init(_name, _symbol);
+        __ERC20PresetMinter_init(_name, _symbol);
+
          __ERC20Votes_init();
 
         _mint(_msgSender(), _initialSupply);
@@ -60,7 +61,7 @@ contract BNSToken is
         address from,
         address to,
         uint256 amount
-    ) internal virtual override(ERC20Upgradeable, ERC20PresetMinterPauserUpgradeable)
+    ) internal virtual override(ERC20Upgradeable)
     {
         super._beforeTokenTransfer(from, to, amount);
     }
