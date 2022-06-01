@@ -15,6 +15,8 @@ require('hardhat-contract-sizer');
 
 //require('hardhat-deploy');
 
+require("./tasks/deploy")
+
 require('@openzeppelin/hardhat-upgrades');
 
 require('hardhat-abi-exporter',{ path: 'data/abi', clear: true });
