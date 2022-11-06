@@ -1,2 +1,2 @@
-# bns-token
-Binance Name Service governance token
+# Governance Tokem
+Decentra ID governance token 
